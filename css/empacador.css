@@ -1,0 +1,73 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    text-align: center;
+    padding: 50px;
+    margin: 0;
+}
+
+h2 {
+    color: #D62828; /* Rojo institucional */
+}
+
+.boton {
+    display: block;
+    margin: 20px auto;
+    padding: 15px 30px;
+    font-size: 16px;
+    background-color: #D62828; /* Rojo institucional */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 250px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.boton:hover {
+    background-color: #b81f1f;
+}
+
+.boton-cerrar {
+    background-color: #FECB00; /* Amarillo institucional */
+    color: black;
+}
+
+.boton-cerrar:hover {
+    background-color: #d4aa00;
+}
+
+.usuario-info {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #666;
+    font-size: 14px;
+}
+/* Estilo base para todos los “botones” */
+.boton {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    background: #007bff;      /* Ajusta a tu color */
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.boton:hover {
+    background: #0056b3;      /* Tono más oscuro al pasar el mouse */
+}
+
+/* Botón de cerrar sesión si lo quieres diferente */
+.boton-cerrar {
+    background: #dc3545;
+}
+
+.boton-cerrar:hover {
+    background: #b52a38;
+}

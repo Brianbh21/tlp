@@ -1,0 +1,63 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.contenedor {
+    text-align: center;
+    margin-top: 60px;
+}
+
+.user-info {
+    margin-bottom: 30px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+}
+
+.botones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    margin: 30px auto;
+    max-width: 600px;
+    padding: 0 10px;
+}
+
+.boton.fila {
+    background-color: #D62828;
+    color: white;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+    width: 100%;
+}
+
+.boton:hover {
+    background-color: #b71c1c;
+}
+
+.logout {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.logout button {
+    background-color: #FECB00;
+    color: #000;
+    padding: 12px 30px;
+    font-size: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.logout button:hover {
+    background-color: #e6b800;
+}

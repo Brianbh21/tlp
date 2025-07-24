@@ -1,0 +1,205 @@
+
+/* === COLORES CORPORATIVOS === */
+:root {
+    --color-rojo: #D62828;
+    --color-amarillo: #FECB00;
+    --color-texto: #333;
+    --color-fondo: #f8f9fa;
+    --color-blanco: #ffffff;
+    --color-borde: #dee2e6;
+}
+
+/* === ESTILOS GENERALES === */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--color-fondo);
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* === CABECERA === */
+.header {
+    background-color: var(--color-rojo);
+    color: var(--color-blanco);
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.user-info {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background-color: var(--color-amarillo);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: var(--color-texto);
+}
+
+/* === BUSCADOR === */
+.search-section {
+    background: var(--color-blanco);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.search-form .form-group {
+    flex: 1;
+    min-width: 220px;
+}
+
+input[type="text"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+/* === BOTONES === */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background: var(--color-rojo);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #b71f1f;
+}
+
+.btn-secondary {
+    background: var(--color-amarillo);
+    color: var(--color-texto);
+}
+
+.btn-secondary:hover {
+    background: #e6b800;
+}
+
+.btn-info {
+    background: #17a2b8;
+    color: white;
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+/* === RESULTADOS === */
+.results-section {
+    margin-top: 20px;
+}
+
+.lotes-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.lote-card {
+    border: 1px solid var(--color-borde);
+    padding: 20px;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.lote-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.qr-status {
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+.qr-disponible {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.qr-no-disponible {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+.back-link {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.lote-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+/* === ALERTA === */
+.alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .search-form {
+        flex-direction: column;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lote-header {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .lote-actions {
+        flex-direction: column;
+    }
+}

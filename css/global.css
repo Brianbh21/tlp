@@ -1,0 +1,1036 @@
+/* =====================================
+   GLOBAL.CSS UNIFICADO
+   Sistema de Gestión de Lotes
+   ===================================== */
+
+/* === VARIABLES GLOBALES === */
+:root {
+    --color-rojo: #D62828;
+    --color-amarillo: #FECB00;
+    --color-texto: #333;
+    --color-fondo: #f8f9fa;
+    --color-blanco: #ffffff;
+    --color-borde: #dee2e6;
+    --color-gris: #6c757d;
+    --color-verde: #28a745;
+    --color-azul: #17a2b8;
+    --border-radius: 8px;
+    --shadow-light: 0 2px 5px rgba(0,0,0,0.1);
+    --shadow-medium: 0 4px 15px rgba(0,0,0,0.1);
+    --shadow-heavy: 0 5px 20px rgba(0,0,0,0.1);
+    --transition: all 0.3s ease;
+}
+
+/* === RESET Y ESTILOS BASE === */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--color-fondo);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: var(--color-texto);
+}
+
+/* === CONTENEDORES GENERALES === */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+.contenedor {
+    max-width: 800px;
+    margin: 20px auto;
+    background: var(--color-blanco);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-medium);
+}
+
+.contenedor-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f7f7f7;
+    padding: 20px;
+}
+
+.panel {
+    background: var(--color-blanco);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-medium);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+.encabezado-usuario {
+    text-align: center;
+    margin: 20px 0;
+    background-color: #FECB00;
+    color: #D62828;
+    padding: 10px 20px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border-radius: 15px;
+    display: inline-block;
+}
+
+/* === TÍTULOS === */
+h1, h2, h3 {
+    color: var(--color-rojo);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.titulo-rojo {
+    color: var(--color-rojo);
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.titulo-panel {
+    color: var(--color-rojo);
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* === SISTEMA DE BOTONES === */
+.btn, button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    transition: var(--transition);
+    text-decoration: none;
+    display: inline-block;
+}
+.login-box button {
+    margin-top: 15px;
+}
+
+/* Botones principales */
+.btn-primary, .boton-institucional {
+    background: var(--color-rojo);
+    color: var(--color-blanco);
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    display: block;
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    font-weight: bold;
+    transition: var(--transition);
+}
+
+.btn-primary:hover, .boton-institucional:hover {
+    background: #b71c1c;
+}
+
+.boton-institucional.cerrar {
+    background-color: #b00020;
+}
+
+.boton-institucional.cerrar:hover {
+    background-color: #8b0000;
+}
+
+/* Botones secundarios */
+.btn-secondary, .boton-rojo {
+    background: var(--color-amarillo);
+    color: var(--color-texto);
+}
+
+.btn-secondary:hover, .boton-rojo:hover {
+    background: #e6b800;
+}
+
+/* Botones de utilidad */
+.btn-success {
+    background: var(--color-verde);
+    color: var(--color-blanco);
+}
+
+.btn-info {
+    background: var(--color-azul);
+    color: var(--color-blanco);
+}
+
+.btn-gris, .btn-volver {
+    background: var(--color-gris);
+    color: var(--color-blanco);
+}
+
+.btn-gris:hover, .btn-volver:hover {
+    background: #5a6268;
+}
+
+/* Botón de envío */
+.btn-rojo, .boton-enviar {
+    background-color: var(--color-rojo);
+    color: var(--color-blanco);
+    border: none;
+    padding: 12px 20px;
+    font-weight: bold;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn-rojo:hover, .boton-enviar:hover {
+    background-color: #b71c1c;
+}
+
+/* === LAYOUT DE BOTONES === */
+.botones {
+    display: flex;
+    flex-direction: column !important;
+    gap: 1rem;
+    margin-top: 2rem;
+    align-items: center;
+}
+
+.botones .boton, .botones .btn {
+    width: 100%;
+    max-width: 320px;
+}
+
+.botones-verticales {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Grid de botones para dashboards */
+.botones.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    margin: 30px auto;
+    max-width: 600px;
+    padding: 0 10px;
+}
+
+.boton.fila, .boton.lista {
+    background-color: var(--color-rojo);
+    color: var(--color-blanco);
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: var(--transition);
+    width: 100%;
+}
+
+.boton.fila:hover, .boton.lista:hover {
+    background-color: #b71c1c;
+}
+
+/* === FORMULARIOS === */
+.form-container {
+    background: var(--color-blanco);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: var(--shadow-heavy);
+    width: 95%;
+    max-width: 500px;
+    margin: 40px auto;
+}
+
+.search-section {
+    background: var(--color-blanco);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-light);
+}
+
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.search-form .form-group {
+    flex: 1;
+    min-width: 220px;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: var(--color-texto);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="date"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--border-radius);
+    font-size: 14px;
+}
+
+input[type="submit"] {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background-color: var(--color-rojo);
+    color: var(--color-blanco);
+    font-weight: bold;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+input[type="submit"]:hover {
+    background-color: #b71c1c;
+}
+
+/* === CABECERA === */
+.header {
+    background-color: var(--color-rojo);
+    color: var(--color-blanco);
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.user-info {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background-color: var(--color-amarillo);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: var(--color-texto);
+}
+
+/* === INFORMACIÓN DEL USUARIO === */
+
+.usuario-derecha {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 14px;
+    color: #333;
+}
+
+.titulo-panel {
+    text-align: center;
+    color: #D62828;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.botones-verticales {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.usuario-info {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.empacador-info {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f9f6e8;
+    border-left: 5px solid var(--color-amarillo);
+    border-radius: var(--border-radius);
+    font-size: 14px;
+    color: var(--color-texto);
+}
+
+.info-usuario {
+    margin-bottom: 20px;
+    font-size: 15px;
+    color: var(--color-texto);
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: var(--border-radius);
+}
+
+/* === TABLAS === */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--color-blanco);
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid var(--color-borde);
+}
+
+th {
+    background-color: var(--color-rojo);
+    color: var(--color-blanco);
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+}
+
+td {
+    padding: 10px;
+    text-align: center;
+}
+
+/* Estados de filas */
+.fila-vencido {
+    background-color: #ffb3b3;
+}
+
+.fila-proximo {
+    background-color: #fff2b3;
+}
+
+/* === TARJETAS Y RESULTADOS === */
+.results-section {
+    margin-top: 20px;
+}
+
+.lotes-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.lote-card {
+    border: 1px solid var(--color-borde);
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--color-blanco);
+    box-shadow: var(--shadow-light);
+}
+
+.lote-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.lote-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+/* === ESTADOS QR === */
+.qr-status {
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: var(--border-radius);
+}
+
+.qr-disponible {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.qr-no-disponible {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* === LECTOR QR === */
+#qr-reader, #lector {
+    width: 100%;
+    margin: 20px auto;
+    border: 2px solid var(--color-amarillo);
+    border-radius: var(--border-radius);
+    padding: 10px;
+}
+
+#qr-result {
+    background-color: var(--color-amarillo);
+    color: var(--color-texto);
+    padding: 12px;
+    font-weight: bold;
+    border-radius: var(--border-radius);
+    margin-top: 15px;
+    text-align: center;
+}
+
+.resultado {
+    color: var(--color-verde);
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+/* === ALERTAS Y MENSAJES === */
+.alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+}
+
+.error {
+    color: var(--color-rojo);
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.mensaje {
+    background: #fef3c7;
+    border: 1px solid #fcd34d;
+    color: #92400e;
+    padding: 12px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+}
+
+.debug-info, .bodega-info {
+    background: var(--color-amarillo);
+    color: var(--color-texto);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+/* === LOGIN === */
+.login-box {
+    background: var(--color-blanco);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-medium);
+    width: 90%;
+    max-width: 350px;
+    text-align: center;
+    border-top: 10px solid var(--color-rojo);
+}
+
+.login-box img {
+    width: 80px;
+    margin-bottom: 20px;
+}
+
+.login-box h2 {
+    margin-bottom: 20px;
+    color: var(--color-rojo);
+}
+
+/* === FILTROS === */
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.filtros input, .filtros button {
+    padding: 10px;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--border-radius);
+}
+
+.filtros button {
+    background-color: var(--color-amarillo);
+    color: var(--color-texto);
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+}
+
+/* === UTILIDADES === */
+.inline {
+    display: flex;
+    gap: 10px;
+}
+
+.text-link {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.text-link a {
+    color: var(--color-rojo);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.text-link a:hover {
+    text-decoration: underline;
+}
+
+.back-link {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.logout {
+    margin-top: 30px;
+    text-align: center;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .contenedor {
+        margin: 10px;
+        padding: 20px;
+    }
+    
+    .contenedor-panel {
+        padding: 10px;
+    }
+    
+    .search-form {
+        flex-direction: column;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .lote-header {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .lote-actions {
+        flex-direction: column;
+    }
+    
+    .inline {
+        flex-direction: column;
+    }
+    
+    .user-info {
+        position: static;
+        margin-bottom: 20px;
+    }
+    
+    .usuario-info {
+        position: static;
+        margin-bottom: 20px;
+    }
+    
+    /* Tablas responsivas */
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    
+    tr {
+        margin-bottom: 1rem;
+        border: 1px solid var(--color-borde);
+        border-radius: var(--border-radius);
+        padding: 10px;
+    }
+    
+    td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+        border: none;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    
+    td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        text-align: left;
+        font-weight: bold;
+        color: var(--color-rojo);
+    }
+    
+    th {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .form-container {
+        padding: 20px;
+    }
+    
+    input, select, button {
+        font-size: 16px; /* Evita zoom en iOS */
+    }
+    
+    .login-box {
+        padding: 20px;
+    }
+}
+
+/* === ESTADOS DE FOCUS === */
+input:focus, select:focus, button:focus {
+    outline: 2px solid var(--color-rojo);
+    outline-offset: 2px;
+}
+/*centrar todo */
+
+.page-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* === ANIMACIONES === */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+/* === Estilos para la tabla de Gestión de Usuarios === */
+.tabla-usuarios {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    font-size: 1rem;
+}
+
+.tabla-usuarios th {
+    background-color: #D62828;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.tabla-usuarios td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    vertical-align: middle;
+    background-color: #fff;
+    word-break: break-word;
+}
+
+/* === Botones de acción === */
+.btn-editar,
+.btn-eliminar {
+    display: inline-block;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.btn-editar {
+    background-color: #FECB00;
+    color: black;
+    margin-right: 5px;
+}
+
+.btn-editar:hover {
+    background-color: #e0b800;
+}
+
+.btn-eliminar {
+    background-color: #D62828;
+}
+
+.btn-eliminar:hover {
+    background-color: #b71c1c;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .tabla-usuarios {
+        font-size: 0.9rem;
+    }
+
+    .tabla-usuarios th, .tabla-usuarios td {
+        padding: 10px;
+    }
+
+    .btn-editar, .btn-eliminar {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+}
+/* === RESET Y BASE === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* === CONTENEDOR GENERAL DE LA SECCIÓN === */
+.contenedor-panel {
+    max-width: 1100px;
+    margin: 50px auto;
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+}
+
+/* === TÍTULO PROFESIONAL === */
+.titulo-gestion {
+    text-align: center;
+    font-size: 32px;
+    color: #D62828;
+    font-weight: 800;
+    margin-bottom: 40px;
+    position: relative;
+    order: 1; /* Asegura que esté arriba */
+}
+
+.titulo-gestion::before {
+    content: "";
+    position: absolute;
+    left: calc(50% - 100px);
+    top: 0;
+    font-size: 28px;
+}
+
+.titulo-gestion::after {
+    content: "";
+    display: block;
+    width: 120px;
+    height: 4px;
+    background-color: #D62828;
+    margin: 12px auto 0;
+    border-radius: 10px;
+}
+
+/* === CONTENEDOR DE TABLA === */
+.tabla-centrada {
+    width: 100%;
+    margin-bottom: 30px;
+    order: 2; /* Asegura que esté en el medio */
+    overflow-x: auto;
+}
+
+/* === TABLA === */
+.tabla-usuarios {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 16px;
+    background-color: #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tabla-usuarios th, 
+.tabla-usuarios td {
+    padding: 14px 18px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.tabla-usuarios th {
+    background-color: #D62828;
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tabla-usuarios tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.tabla-usuarios tr:hover {
+    background-color: #f1f1f1;
+    transition: background-color 0.3s ease;
+}
+
+.tabla-usuarios .acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    text-align: center;
+}
+
+/* === BOTONES DE ACCIÓN === */
+.btn-editar-usuario {
+    background-color: #FECB00;
+    color: #000;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    min-width: 80px;
+}
+
+.btn-editar-usuario:hover {
+    background-color: #e6b800;
+    transform: translateY(-2px);
+}
+
+.btn-eliminar-usuario {
+    background-color: #D62828;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    min-width: 80px;
+}
+
+.btn-eliminar-usuario:hover {
+    background-color: #b71d1d;
+    transform: translateY(-2px);
+}
+
+/* === CONTENEDOR DEL BOTÓN REGRESAR === */
+.contenedor-regresar {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+    order: 3; /* Asegura que esté abajo */
+}
+
+/* === BOTÓN REGRESAR === */
+.btn-gris {
+    background-color: #6c757d;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+
+.btn-gris:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .contenedor-panel {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    .titulo-gestion {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    
+    .titulo-gestion::before {
+        left: calc(50% - 80px);
+        font-size: 20px;
+    }
+    
+    .tabla-usuarios {
+        font-size: 14px;
+    }
+    
+    .tabla-usuarios th,
+    .tabla-usuarios td {
+        padding: 10px 12px;
+    }
+    
+    .tabla-usuarios .acciones {
+        flex-direction: row;
+        gap: 4px;
+    }
+    
+    .btn-editar-usuario,
+    .btn-eliminar-usuario {
+        padding: 6px 10px;
+        font-size: 12px;
+        min-width: 60px;
+    }
+    
+    .btn-gris {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .titulo-gestion {
+        font-size: 20px;
+    }
+    
+    .tabla-usuarios th,
+    .tabla-usuarios td {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+    
+    .tabla-usuarios .acciones {
+        flex-direction: column;
+        gap: 3px;
+    }
+}

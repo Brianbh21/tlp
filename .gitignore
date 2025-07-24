@@ -1,0 +1,6 @@
+vendor/
+qrcodes/
+qrs/
+*.log
+*.env
+phpqrcode/
