@@ -1,37 +1,37 @@
 <?php
-// Mostrar errores SQL claros
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 session_start();
-require 'db.php';
-
-// Solo CEDI
-if (empty($_SESSION['nombre']) || ($_SESSION['rol'] ?? '') !== 'cedi') {
-    echo "Acceso denegado. Debes iniciar sesión como CEDI.";
+if (!isset($_SESSION['nombre']) || $_SESSION['rol'] !== 'cedi') {
+    header("Location: index.php");
     exit();
 }
+?>
 
-$nombre   = $_SESSION['nombre'];
-$rol      = $_SESSION['rol'];
-$cedula   = $_SESSION['cedula'] ?? '';
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel del CEDI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+    <div class="contenedor-panel">
+        <div class="panel">
+            <h2 class="titulo-panel">Panel del CEDI</h2>
 
-// Traer traslados pendientes
-$sql = <<<SQL
- SELECT m.*, l.tipo_producto, l.numero_lote
-   FROM movimientos m
-   LEFT JOIN lotes l ON l.id_lote = m.id_lote
-  WHERE UPPER(m.destino) = 'CEDI'
-    AND m.estado_aceptacion = 'pendiente'
-  ORDER BY m.fecha_movimiento ASC
-SQL;
-$res = $conn->query($sql);
-$traslados_pendientes = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
+            <div class="botones-verticales">
+                <a href="traslado_lote.php" class="boton-institucional">🚛 Traslado Manual</a>
+                <a href="traslado_camara.php" class="boton-institucional">📷 Traslado por Cámara</a>
+                <a href="imprimir_lotes.php" class="boton-institucional">🖨️ Imprimir Lotes</a>
+                <a href="movimientos.php" class="boton-institucional">📦 Ver Movimientos</a>
+                <a href="fechas_cercanas.php" class="boton-institucional">📅 Fechas Próximas</a>
+                <a href="logout.php" class="boton-institucional cerrar">🔒 Cerrar Sesión</a>
+            </div>
 
-// Mensaje flash
-$mensaje = $_SESSION['mensaje'] ?? '';
-unset($_SESSION['mensaje']);
-
-// Renderizar vista
-include __DIR__ . '/views/cedi_view.php';
+            <div class="usuario-info">
+                Bienvenido, <?php echo $_SESSION['nombre']; ?> (CEDI)
+            </div>
+        </div>
+    </div>
+</body>
+</html>
