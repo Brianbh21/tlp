@@ -1,142 +1,181 @@
 <?php
-session_start();
+// tlp/includes/traslado_lote_logic.php
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-include 'db.php';
 
-if (!isset($_SESSION['nombre'])) {
-    header("Location: index.php");
+session_start();
+require_once __DIR__ . '/db.php';
+
+if (!isset($_SESSION['rol'], $_SESSION['nombre'])) {
+    header("Location: ../index.php");
     exit();
 }
 
-$rol            = $_SESSION['rol']        ?? 'empacador';
+$rol            = $_SESSION['rol'];
+$nombre_usuario = $_SESSION['nombre'];
 $id_usuario     = $_SESSION['id_usuario'] ?? null;
-$nombre_usuario = $_SESSION['nombre']     ?? 'Usuario';
-$cedula         = $_SESSION['cedula']     ?? 'Sin cédula';
+$cedula         = $_SESSION['cedula']     ?? null;
 
-if (!$id_usuario && $cedula !== 'Sin cédula') {
-    $stmt_user = $conn->prepare("SELECT id_usuario FROM usuarios WHERE cedula = ?");
-    $stmt_user->bind_param("s", $cedula);
-    $stmt_user->execute();
-    $result_user = $stmt_user->get_result();
-    if ($result_user->num_rows > 0) {
-        $user_data   = $result_user->fetch_assoc();
-        $id_usuario  = $user_data['id_usuario'];
+// Asegurar id_usuario si hay cédula
+if (!$id_usuario && $cedula) {
+    $tmp = $conn->prepare("SELECT id_usuario FROM usuarios WHERE cedula = ?");
+    $tmp->bind_param("s", $cedula);
+    $tmp->execute();
+    if ($u = $tmp->get_result()->fetch_assoc()) {
+        $id_usuario = (int)$u['id_usuario'];
         $_SESSION['id_usuario'] = $id_usuario;
     }
-    $stmt_user->close();
+    $tmp->close();
 }
 
 if (!$id_usuario) {
-    exit("❌ Error: No se pudo obtener el ID del usuario.");
+    $_SESSION['mensaje'] = "❌ No se pudo identificar el usuario.";
+    header("Location: ../index.php");
+    exit();
 }
 
-$mensaje = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id_lote            = $_POST['id_lote']          ?? null;
-    $nuevo_estado       = $_POST['nuevo_estado']     ?? null;
-    $cantidad_trasladar = (int)($_POST['cantidad_trasladar'] ?? 0);
-
-    if (!$id_lote || !$nuevo_estado || $cantidad_trasladar <= 0) {
-        $mensaje = "❌ Datos incompletos o inválidos.";
-    } else {
-
-        if ($rol === 'admin') {
-            $verifica = $conn->prepare("SELECT * FROM lotes WHERE id_lote = ?");
-            $verifica->bind_param("i", $id_lote);
-        } else {
-            $estado_permitido = match ($rol) {
-                'empacador' => 'empaque',
-                'almacen'   => 'almacen',
-                'cedi'      => 'CEDI',
-                'inventario'=> 'inventario',
-                default     => 'empaque'
-            };
-            $verifica = $conn->prepare("SELECT * FROM lotes WHERE id_lote = ? AND estado = ?");
-            $verifica->bind_param("is", $id_lote, $estado_permitido);
-        }
-
-        $verifica->execute();
-        $result = $verifica->get_result();
-
-        if ($result->num_rows === 0) {
-            $mensaje = "❌ No tienes permiso para trasladar este lote, o no está en tu bodega.";
-        } else {
-            $lote_actual     = $result->fetch_assoc();
-            $cantidad_actual = (int)$lote_actual['cantidad_total'];
-            $estado_origen   = $lote_actual['estado'];
-            $tipo_producto   = $lote_actual['tipo_producto'];
-
-            if ($cantidad_trasladar > $cantidad_actual) {
-                $mensaje = "❌ No puedes trasladar más de $cantidad_actual unidades.";
-            } else {
-                // LÓGICA DIFERIDA: solo registramos el movimiento como pendiente
-                $conn->begin_transaction();
-                try {
-                    $stmt_mov = $conn->prepare("
-                        INSERT INTO movimientos
-                        (id_lote, tipo_producto, origen, destino, cantidad, fecha_movimiento,
-                         id_responsable, estado_origen, estado_destino, estado_aceptacion)
-                        VALUES (?, ?, ?, ?, ?, NOW(), ?, ?, ?, 'pendiente')
-                    ");
-                    // 8 variables -> 8 tipos
-                    // i: id_lote
-                    // s: tipo_producto
-                    // s: origen
-                    // s: destino
-                    // i: cantidad
-                    // i: id_responsable
-                    // s: estado_origen
-                    // s: estado_destino
-                    $stmt_mov->bind_param(
-                        "isssiiss",
-                        $id_lote,
-                        $tipo_producto,
-                        $estado_origen,
-                        $nuevo_estado,
-                        $cantidad_trasladar,
-                        $id_usuario,
-                        $estado_origen,
-                        $nuevo_estado
-                    );
-                    $stmt_mov->execute();
-
-                    $conn->commit();
-                    $mensaje = "✅ Traslado registrado como pendiente. Esperando aprobación.";
-                } catch (Exception $e) {
-                    $conn->rollback();
-                    $mensaje = "❌ Error en traslado: " . $e->getMessage();
-                }
-            }
-        }
-        $verifica->close();
-    }
-}
-
-// Cargar lotes para el formulario
-$estado_filtro = match ($rol) {
-    'empacador' => 'empaque',
-    'almacen'   => 'almacen',
-    'cedi'      => 'CEDI',
-    'inventario'=> 'inventario',
-    'admin'     => '',
-    default     => 'empaque'
+// Mapear bodega/origen por rol
+$bodega_actual = match (strtolower($rol)) {
+    'empacador'  => 'empaque',
+    'almacen'    => 'almacen',
+    'cedi'       => 'CEDI',
+    'inventario' => 'inventario',
+    'admin'      => '',        // admin ve todo
+    default      => 'empaque'
 };
 
-if ($rol === 'admin') {
-    $stmt = $conn->prepare("SELECT * FROM lotes WHERE cantidad_total > 0 ORDER BY tipo_producto, fecha_empaque DESC");
-} else {
-    $stmt = $conn->prepare("SELECT * FROM lotes WHERE estado = ? AND cantidad_total > 0 ORDER BY tipo_producto, fecha_empaque DESC");
-    $stmt->bind_param("s", $estado_filtro);
-}
-$stmt->execute();
-$result = $stmt->get_result();
+// ======= POST: registrar traslado =======
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id_lote            = isset($_POST['id_lote']) ? (int)$_POST['id_lote'] : 0;
+    $cantidad_trasladar = isset($_POST['cantidad_trasladar']) ? (int)$_POST['cantidad_trasladar'] : 0;
+    $destino_tipo       = $_POST['destino_tipo']   ?? '';
+    $placa_destino      = $_POST['placa_destino']  ?? '';
 
+    if ($id_lote <= 0 || $cantidad_trasladar <= 0 || $destino_tipo === '') {
+        $_SESSION['mensaje'] = "❌ Datos incompletos.";
+        header("Location: ../traslado_lote.php");
+        exit();
+    }
+
+    // Validar que el lote existe y está en mi bodega (excepto admin)
+    if ($bodega_actual === '') {
+        $v = $conn->prepare("SELECT id_lote, numero_lote, tipo_producto, cantidad_total, estado FROM lotes WHERE id_lote = ?");
+        $v->bind_param("i", $id_lote);
+    } else {
+        $v = $conn->prepare("SELECT id_lote, numero_lote, tipo_producto, cantidad_total, estado FROM lotes WHERE id_lote = ? AND estado = ?");
+        $v->bind_param("is", $id_lote, $bodega_actual);
+    }
+    $v->execute();
+    $lote = $v->get_result()->fetch_assoc();
+    $v->close();
+
+    if (!$lote) {
+        $_SESSION['mensaje'] = "❌ El lote no está en tu bodega.";
+        header("Location: ../traslado_lote.php");
+        exit();
+    }
+    if ($cantidad_trasladar > (int)$lote['cantidad_total']) {
+        $_SESSION['mensaje'] = "❌ No puedes trasladar más de {$lote['cantidad_total']} unidades.";
+        header("Location: ../traslado_lote.php");
+        exit();
+    }
+
+    // Listado de placas (estados que NO son bodegas)
+    $bodegas = ["empaque","almacen","CEDI","inventario"];
+    $placas = [];
+    $rs = $conn->query("SELECT DISTINCT estado FROM lotes WHERE estado NOT IN ('empaque','almacen','CEDI','inventario')");
+    while ($r = $rs->fetch_assoc()) { $placas[] = $r['estado']; }
+
+    // Resolver destino final
+    if ($destino_tipo === 'conductor') {
+        if ($placa_destino === '' || !in_array($placa_destino, $placas, true)) {
+            $_SESSION['mensaje'] = "❌ Destino conductor inválido. Selecciona una placa válida.";
+            header("Location: ../traslado_lote.php");
+            exit();
+        }
+        $destino_final = $placa_destino; // => movimientos.estado_destino = <PLACA>
+    } else {
+        $permitidos = ['CEDI','almacen','empaque'];
+        if (!in_array($destino_tipo, $permitidos, true)) {
+            $_SESSION['mensaje'] = "❌ Destino inválido.";
+            header("Location: ../traslado_lote.php");
+            exit();
+        }
+        $destino_final = $destino_tipo;
+    }
+
+    // Crear movimiento pendiente
+    $conn->query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED");
+    $conn->begin_transaction();
+
+    try {
+        $stmt_mov = $conn->prepare("
+            INSERT INTO movimientos
+            (id_lote, tipo_producto, origen, destino, cantidad, fecha_movimiento,
+             id_responsable, estado_origen, estado_destino, estado_aceptacion)
+            VALUES (?,?,?,?,?, NOW(), ?, ?, ?, 'pendiente')
+        ");
+        // Tipos: i s s s i  i s s
+        $stmt_mov->bind_param(
+            "isssiiss",
+            $lote['id_lote'],           // i
+            $lote['tipo_producto'],     // s
+            $lote['estado'],            // s (columna 'origen')
+            $destino_final,             // s (columna 'destino')
+            $cantidad_trasladar,        // i
+            $id_usuario,                // i
+            $lote['estado'],            // s (estado_origen)
+            $destino_final              // s (estado_destino)
+        );
+        $stmt_mov->execute();
+        $stmt_mov->close();
+
+        $conn->commit();
+        $_SESSION['mensaje'] = "✅ Traslado registrado como pendiente.";
+    } catch (Exception $e) {
+        $conn->rollback();
+        $_SESSION['mensaje'] = "❌ Error al registrar traslado: " . $e->getMessage();
+    }
+
+    header("Location: ../traslado_lote.php");
+    exit();
+}
+
+// ======= GET: cargar datos para la vista =======
+
+// Lotes visibles para el rol
+if ($bodega_actual === '') {
+    $q = $conn->prepare("SELECT * FROM lotes WHERE cantidad_total > 0 ORDER BY tipo_producto, fecha_empaque DESC");
+} else {
+    $q = $conn->prepare("SELECT * FROM lotes WHERE estado = ? AND cantidad_total > 0 ORDER BY tipo_producto, fecha_empaque DESC");
+    $q->bind_param("s", $bodega_actual);
+}
+$q->execute();
+$res = $q->get_result();
+
+// Agrupar por tipo
 $lotes_por_tipo = [];
-while ($row = $result->fetch_assoc()) {
+while ($row = $res->fetch_assoc()) {
     $lotes_por_tipo[$row['tipo_producto']][] = $row;
 }
-$stmt->close();
-?>
+$q->close();
+
+// Placas disponibles para el select
+$placas = [];
+$rs = $conn->query("SELECT DISTINCT estado FROM lotes WHERE estado NOT IN ('empaque','almacen','CEDI','inventario') ORDER BY estado");
+while ($r = $rs->fetch_assoc()) { $placas[] = $r['estado']; }
+
+// Mensaje
+$mensaje = $_SESSION['mensaje'] ?? '';
+unset($_SESSION['mensaje']);
+
+// Exponer a la vista:
+$GLOBALS['lotes_por_tipo'] = $lotes_por_tipo;
+$GLOBALS['placas']         = $placas;
+$GLOBALS['mensaje']        = $mensaje;
+$GLOBALS['rol']            = $rol;
+$GLOBALS['bodega_actual']  = $bodega_actual;
+$GLOBALS['nombre_usuario'] = $nombre_usuario;
+$GLOBALS['id_usuario']     = $id_usuario;
